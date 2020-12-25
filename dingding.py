@@ -73,7 +73,7 @@ def notify(title, chinese_title, category, abstract, page, paper):
             "msgtype": "text",
             "agentid": "1000004",
             "text": {
-                "content": f"类别：{category}\n\n英文标题：{title}\n\n中文标题：{chinese_title}\n\n论文简介：{baidu_translate(abstract)}\n\n论文：{paper}"
+                "content": f"类别：{category}\n\n英文标题：{title}\n中文标题：{chinese_title}\n论文简介：{baidu_translate(abstract)}\n\n论文：{paper}"
             }
         }
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
