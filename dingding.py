@@ -48,7 +48,7 @@ def baidu_translate(text):
     return text
 
 
-def notify(title, chinese_title, category, abstract, link, page):
+def notify(title, chinese_title, category, abstract, page, paper):
     print(title, chinese_title, category)
 
     access_token_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwde6ec503081c8426&corpsecret=_iyW_Dv_VonG628Pqhj2ofc2lPzRvuAtKUc17yf-wZ8'
@@ -73,7 +73,7 @@ def notify(title, chinese_title, category, abstract, link, page):
             "msgtype": "text",
             "agentid": "1000004",
             "text": {
-                "content": f"类别：{category}\n\n英文标题：{title}\n\n中文标题：{chinese_title}\n\n论文简介：{baidu_translate(abstract)}\n\n论文：{link}"
+                "content": f"类别：{category}\n\n英文标题：{title}\n\n中文标题：{chinese_title}\n\n论文简介：{baidu_translate(abstract)}\n\n论文：{paper}"
             }
         }
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
