@@ -79,4 +79,11 @@ class MongoCachePipeline:
         cursor = client.papers.arxiv.find({"url": item['url']})
         if cursor.count() <= 0:
             client.papers.arxiv.insert_one(doc)
+        else:
+            query = {"url": item['url'], "chinese_title": ''}
+            if client.papers.arxiv.find(query).count() > 0:
+                client.papers.arxiv.update_one(
+                    query,
+                    {"$set": {"chinese_title": self.translate_with_youdao(item['title'])}}
+                )
         return item
