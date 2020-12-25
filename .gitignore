@@ -3,10 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-.scrapy
-crawls
+.scrapy/
+crawls/
 .python-version
-.idea
+.idea/
 
 # C extensions
 *.so
