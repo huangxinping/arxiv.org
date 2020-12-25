@@ -1,0 +1,7 @@
+.scrapy/
+crawls/
+.python-version
+run.sh
+.git/
+.idea/
+docs/
