@@ -68,12 +68,24 @@ def notify(title, chinese_title, category, abstract, page, paper):
         #         >标   题：<font color=\"comment\">{chinese_title}</font>"""
         #     }
         # }
+        chinese_abstract = baidu_translate(abstract)
         data = {
             "touser": "HuangXinPing",
             "msgtype": "text",
             "agentid": "1000004",
             "text": {
-                "content": f"类别：{category}\n\n英文标题：{title}\n中文标题：{chinese_title}\n论文简介：{baidu_translate(abstract)}\n\n论文：{paper}"
+                "content": f"类别：{category}\n\n英文标题：{title}\n中文标题：{chinese_title}\n论文简介：{chinese_abstract}\n\n论文：{paper}"
+            }
+        }
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+        requests.post(url=url, json=data, headers=headers)
+
+        data = {
+            "touser": "LiuTao|JinYe",
+            "msgtype": "text",
+            "agentid": "1000004",
+            "text": {
+                "content": f"类别：{category}\n\n英文标题：{title}\n中文标题：{chinese_title}\n论文简介：{chinese_abstract}"
             }
         }
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
