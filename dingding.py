@@ -48,47 +48,40 @@ def baidu_translate(text):
     return text
 
 
-def notify(title, chinese_title, category, abstract, page, paper):
-    print(title, chinese_title, category)
+def notify(title, chinese_title, category, abstract, page, paper, created_at):
+    print(category, chinese_title, created_at)
 
+    """
+    docs: https://work.weixin.qq.com/api/doc/90001/90143/90372#%E6%96%87%E6%9C%AC%E5%8D%A1%E7%89%87%E6%B6%88%E6%81%AF
+    """
     access_token_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwde6ec503081c8426&corpsecret=_iyW_Dv_VonG628Pqhj2ofc2lPzRvuAtKUc17yf-wZ8'
     response = requests.get(url=access_token_url)
     if response.ok and response.json()['errcode'] == 0:
         access_token = response.json()['access_token']
         url = f'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}'
-        # data = {
-        #     "touser": "HuangXinPing",
-        #     "msgtype": "markdown",
-        #     "agentid": "1000004",
-        #     "markdown": {
-        #         "content": f"""您今天的论文已准备好`
-        #         >**论文详情**
-        #         >类   别：<font color=\"info\">{category}</font>
-        #         >原始标题：<font color=\"warning\">{title}</font>
-        #         >标   题：<font color=\"comment\">{chinese_title}</font>"""
-        #     }
-        # }
         chinese_abstract = baidu_translate(abstract)
         data = {
             "touser": "HuangXinPing",
-            "msgtype": "text",
+            "msgtype": "textcard",
             "agentid": "1000004",
-            "text": {
-                "content": f"类别：{category}\n\n英文标题：{title}\n中文标题：{chinese_title}\n论文简介：{chinese_abstract}\n\n论文：{paper}"
-            }
+            "textcard": {
+                "title": f"{chinese_title}",
+                "description": f"<div class=\"gray\">{created_at} {category}</div> <div class=\"normal\">点击查看论文<br><br>⏬⏬⏬⏬⏬论文简介⏬⏬⏬⏬⏬⏬</div>",
+                "url": f"{paper}",
+                "btntxt": "更多"
+            },
         }
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
         requests.post(url=url, json=data, headers=headers)
 
         data = {
-            "touser": "LiuTao|JinYe",
+            "touser": "HuangXinPing|LiuTao|jiny",
             "msgtype": "text",
             "agentid": "1000004",
             "text": {
-                "content": f"类别：{category}\n\n英文标题：{title}\n中文标题：{chinese_title}\n论文简介：{chinese_abstract}"
+                "content": f"{chinese_abstract}"
             }
         }
-        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
         requests.post(url=url, json=data, headers=headers)
 
 
@@ -117,7 +110,7 @@ def main():
             keeped_titles.append(doc['title'])
             keeped_docs.append(doc)
     for doc in keeped_docs:
-        notify(doc['title'], doc['chinese_title'], translates[doc['subjects'][0]['short']], doc['abstract'], doc['url'], doc['attachment'])
+        notify(doc['title'], doc['chinese_title'], translates[doc['subjects'][0]['short']], doc['abstract'], doc['url'], doc['attachment'], yesterday)
 
 
 if __name__ == '__main__':
