@@ -4,6 +4,9 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import pymongo
+from scrapy.exceptions import IgnoreRequest
+
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -78,7 +81,11 @@ class ArxivDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        return None
+        client = pymongo.MongoClient("192.168.0.210", 27017)
+        cursor = client.papers.arxiv.find({"url": request.url.split('?')[0]})
+        if cursor.count() <= 0:
+            return None
+        raise IgnoreRequest(f'{request.url} is filted.')
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.

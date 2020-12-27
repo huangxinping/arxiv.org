@@ -53,6 +53,7 @@ COOKIES_ENABLED = True
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'arxiv.rotate_useragent.RotateUserAgentMiddleware': 400,
+    'arxiv.middlewares.ArxivDownloaderMiddleware': 500
 }
 
 # Enable or disable extensions
