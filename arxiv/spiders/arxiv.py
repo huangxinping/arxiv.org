@@ -50,7 +50,7 @@ class ArxivSpider(CrawlSpider):
 
     def parse_item(self, response):
         item = ArxivItem()
-        item['url'] = response.url
+        item['url'] = response.url.split('?')[0]
         item['attachment'] = response.url.split('?')[0].replace('abs', 'pdf') + '.pdf'
 
         title_xpath = "//h1[@class='title mathjax']/text()"
