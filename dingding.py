@@ -95,9 +95,19 @@ def main():
 
     client = pymongo.MongoClient("192.168.0.210", 27017)
     subject_regx = re.compile("^cs.", re.IGNORECASE)
-    today = datetime.datetime.now().strftime('%Y-%m-%d')
-    yesterday = (datetime.datetime.now() - datetime.timedelta(1)).strftime('%Y-%m-%d')
-    date_regx = re.compile(yesterday, re.IGNORECASE)
+    today = datetime.datetime.now()
+    yesterday = today - datetime.timedelta(1)
+    the_day_before_yesterday = today - datetime.timedelta(2)
+    three_days_ago = today - datetime.timedelta(3)
+    date = today
+    if today.weekday() == 5: # saturday
+        date = yesterday
+    elif today.weekday() == 6: # sunday
+        date = the_day_before_yesterday
+    elif today.weekday() == 0: # monday
+        date = three_days_ago
+
+    date_regx = re.compile(date.strftime('%Y-%m-%d'), re.IGNORECASE)
     cursor = client.papers.arxiv.find({
         'submissions.date': date_regx,
         'subjects.short': subject_regx
