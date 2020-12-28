@@ -3,63 +3,24 @@ import re
 import csv
 import datetime
 import requests
-import time
-import hashlib
-import http.client
-import urllib
-import random
-import json
+from translate import translate_with_baidu
 
 
-def baidu_translate(text):
-    appid = '20201116000617930'  # 填写你的appid
-    secretKey = 'PSrK_o403EnySZ_SvIXn'  # 填写你的密钥
-
-    httpClient = None
-    myurl = '/api/trans/vip/translate'
-
-    fromLang = 'auto'  # 原文语种
-    toLang = 'zh'  # 译文语种
-    salt = random.randint(32768, 65536)
-    q = text
-    sign = appid + q + str(salt) + secretKey
-    sign = hashlib.md5(sign.encode()).hexdigest()
-    myurl = myurl + '?appid=' + appid + '&q=' + urllib.parse.quote(
-        q) + '&from=' + fromLang + '&to=' + toLang + '&salt=' + str(
-        salt) + '&sign=' + sign
-
-    try:
-        httpClient = http.client.HTTPConnection('api.fanyi.baidu.com')
-        httpClient.request('GET', myurl)
-
-        # response是HTTPResponse对象
-        response = httpClient.getresponse()
-        result_all = response.read().decode("utf-8")
-        result = json.loads(result_all)
-
-        print(result)
-        if 'error_code' not in result:
-            return result['trans_result'][0]['dst']
-    except Exception as e:
-        print(e)
-    finally:
-        if httpClient:
-            httpClient.close()
-    return text
+current_access_token = None
 
 
 def notify(title, chinese_title, category, abstract, page, paper, created_at):
     """
     docs: https://work.weixin.qq.com/api/doc/90001/90143/90372#%E6%96%87%E6%9C%AC%E5%8D%A1%E7%89%87%E6%B6%88%E6%81%AF
     """
-    access_token_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwde6ec503081c8426&corpsecret=_iyW_Dv_VonG628Pqhj2ofc2lPzRvuAtKUc17yf-wZ8'
-    response = requests.get(url=access_token_url)
-    if response.ok and response.json()['errcode'] == 0:
-        access_token = response.json()['access_token']
+    def send(access_token, title, chinese_title, category, abstract, page, paper, created_at):
+        if len(chinese_title) <= 0:
+            return
         url = f'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}'
-        chinese_abstract = baidu_translate(abstract)
+        chinese_abstract = translate_with_baidu(abstract)
         data = {
-            "touser": "HuangXinPing",
+            "touser": "HuangXinPing|LiuTao|jiny",
+            # "touser": "HuangXinPing",
             "msgtype": "textcard",
             "agentid": "1000004",
             "textcard": {
@@ -70,10 +31,11 @@ def notify(title, chinese_title, category, abstract, page, paper, created_at):
             },
         }
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-        requests.post(url=url, json=data, headers=headers)
+        resp = requests.post(url=url, json=data, headers=headers)
 
         data = {
             "touser": "HuangXinPing|LiuTao|jiny",
+            # "touser": "HuangXinPing",
             "msgtype": "text",
             "agentid": "1000004",
             "text": {
@@ -81,6 +43,16 @@ def notify(title, chinese_title, category, abstract, page, paper, created_at):
             }
         }
         requests.post(url=url, json=data, headers=headers)
+
+    if current_access_token:
+        access_token = current_access_token
+        send(access_token, title, chinese_title, category, abstract, page, paper, created_at)
+    else:
+        access_token_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwde6ec503081c8426&corpsecret=_iyW_Dv_VonG628Pqhj2ofc2lPzRvuAtKUc17yf-wZ8'
+        response = requests.get(url=access_token_url)
+        if response.ok and response.json()['errcode'] == 0:
+            access_token = response.json()['access_token']
+            send(access_token, title, chinese_title, category, abstract, page, paper, created_at)
 
 
 def main():
@@ -115,6 +87,7 @@ def main():
                     category = item['short']
                     break
             notify(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'], doc['attachment'], date.strftime('%Y-%m-%d'))
+            # time.sleep(5)
 
         if cursor.count() > 0:
             break
