@@ -31,7 +31,7 @@ def notify(title, chinese_title, category, abstract, page, paper, created_at):
             },
         }
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-        resp = requests.post(url=url, json=data, headers=headers)
+        requests.post(url=url, json=data, headers=headers)
 
         data = {
             "touser": "HuangXinPing|LiuTao|jiny",
