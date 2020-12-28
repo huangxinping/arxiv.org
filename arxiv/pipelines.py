@@ -83,7 +83,7 @@ class MongoCachePipeline:
             query = {"url": item['url'], "chinese_title": ''}
             if client.papers.arxiv.find(query).count() > 0:
                 client.papers.arxiv.update_one(
-                    query,
+                    {'_id': item['_id']},
                     {"$set": {"chinese_title": self.translate_with_youdao(item['title'])}}
                 )
         return item
