@@ -104,10 +104,10 @@ if __name__ == '__main__':
         try:
             chinese_title = translate_with_youdao(doc['title'])
             client.papers.arxiv.update_one(
-                {"title": doc['title']},
+                {"_id": doc['_id']},
                 {"$set": {"chinese_title": chinese_title}}
             )
-            print(chinese_title)
+            print(doc['_id'], chinese_title)
         except Exception as e:
             print(e)
 
