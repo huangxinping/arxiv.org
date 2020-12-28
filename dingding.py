@@ -49,8 +49,6 @@ def baidu_translate(text):
 
 
 def notify(title, chinese_title, category, abstract, page, paper, created_at):
-    print(category, chinese_title, created_at)
-
     """
     docs: https://work.weixin.qq.com/api/doc/90001/90143/90372#%E6%96%87%E6%9C%AC%E5%8D%A1%E7%89%87%E6%B6%88%E6%81%AF
     """
@@ -111,7 +109,12 @@ def main():
                 keeped_titles.append(doc['title'])
                 keeped_docs.append(doc)
         for doc in keeped_docs:
-            notify(doc['title'], doc['chinese_title'], translates[doc['subjects'][0]['short']], doc['abstract'], doc['url'], doc['attachment'], date.strftime('%Y-%m-%d'))
+            category = ''
+            for item in doc['subjects']:
+                if str(item['short']).startswith('cs.'):
+                    category = item['short']
+                    break
+            notify(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'], doc['attachment'], date.strftime('%Y-%m-%d'))
 
         if cursor.count() > 0:
             break
