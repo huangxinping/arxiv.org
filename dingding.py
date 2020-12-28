@@ -96,31 +96,25 @@ def main():
     client = pymongo.MongoClient("192.168.0.210", 27017)
     subject_regx = re.compile("^cs.", re.IGNORECASE)
     today = datetime.datetime.now()
-    yesterday = today - datetime.timedelta(1)
-    the_day_before_yesterday = today - datetime.timedelta(2)
-    three_days_ago = today - datetime.timedelta(3)
-    date = today
-    if today.weekday() == 5: # saturday
-        date = yesterday
-    elif today.weekday() == 6: # sunday
-        date = the_day_before_yesterday
-    elif today.weekday() == 0: # monday
-        date = three_days_ago
+    for offset in range(0, 5):
+        date = today - datetime.timedelta(offset)
+        date_regx = re.compile(date.strftime('%Y-%m-%d'), re.IGNORECASE)
+        cursor = client.papers.arxiv.find({
+            'submissions.date': date_regx,
+            'subjects.short': subject_regx
+        })
 
-    date_regx = re.compile(date.strftime('%Y-%m-%d'), re.IGNORECASE)
-    cursor = client.papers.arxiv.find({
-        'submissions.date': date_regx,
-        'subjects.short': subject_regx
-    })
+        keeped_titles = []
+        keeped_docs = []
+        for doc in cursor:
+            if doc['title'] not in keeped_titles:
+                keeped_titles.append(doc['title'])
+                keeped_docs.append(doc)
+        for doc in keeped_docs:
+            notify(doc['title'], doc['chinese_title'], translates[doc['subjects'][0]['short']], doc['abstract'], doc['url'], doc['attachment'], date.strftime('%Y-%m-%d'))
 
-    keeped_titles = []
-    keeped_docs = []
-    for doc in cursor:
-        if doc['title'] not in keeped_titles:
-            keeped_titles.append(doc['title'])
-            keeped_docs.append(doc)
-    for doc in keeped_docs:
-        notify(doc['title'], doc['chinese_title'], translates[doc['subjects'][0]['short']], doc['abstract'], doc['url'], doc['attachment'], yesterday)
+        if cursor.count() > 0:
+            break
 
 
 if __name__ == '__main__':

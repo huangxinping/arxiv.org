@@ -1,20 +1,10 @@
+import requests
 import random
-from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+import pymongo
+import time
 
 
-class RotateUserAgentMiddleware(UserAgentMiddleware):
-    def __init__(self, user_agent=''):
-        self.user_agent = user_agent
-
-    def process_request(self, request, spider):
-        ua = random.choice(self.user_agent_list)
-        if ua:
-            request.headers.setdefault('User-Agent', ua)
-            # 参考 http://pkmishra.github.io/blog/2013/03/18/how-to-run-scrapy-with-TOR-and-multiple-browser-agents-part-1-mac/
-            # request.meta['proxy'] = 'http://127.0.0.1:8888'
-
-    # the default user_agent_list composes chrome,I E,firefox,Mozilla,opera,netscape
-    # for more user agent strings,you can find it in http://www.useragentstring.com/pages/useragentstring.php
+def translate_with_youdao(text):
     user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 "
         "(KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -53,3 +43,31 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 "
         "(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"
     ]
+    url = f'http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i={text}'
+    resp = requests.get(url, headers={
+        'User-Agent': random.choice(user_agent_list)
+    })
+    if resp.ok:
+        try:
+            return resp.json()['translateResult'][0][0]['tgt']
+        except Exception as e:
+            ...
+
+    raise Exception(f'{resp.text}')
+
+
+if __name__ == '__main__':
+    client = pymongo.MongoClient("192.168.0.210", 27017)
+    cursor = client.papers.arxiv.find({"chinese_title": ''})
+    for doc in cursor:
+        try:
+            chinese_title = translate_with_youdao(doc['title'])
+            client.papers.arxiv.update_one(
+                {"title": doc['title']},
+                {"$set": {"chinese_title": chinese_title}}
+            )
+            print(chinese_title)
+        except Exception as e:
+            print(e)
+
+        time.sleep(1)
