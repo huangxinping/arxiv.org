@@ -6,6 +6,7 @@ import http.client
 import urllib
 import random
 import json
+import re
 
 
 def translate_with_baidu(text):
@@ -99,7 +100,13 @@ def translate_with_youdao(text):
 
 if __name__ == '__main__':
     client = pymongo.MongoClient("192.168.0.210", 27017)
-    cursor = client.papers.arxiv.find({"chinese_title": ''})
+    subject_regx = re.compile("^cs.", re.IGNORECASE)
+    cursor = client.papers.arxiv.find({
+            "chinese_title": '',
+            'subjects.short': subject_regx
+        }).sort({
+            'submissions.date': pymongo.DESCENDING
+        }).limit(100)
     for doc in cursor:
         try:
             chinese_title = translate_with_youdao(doc['title'])
