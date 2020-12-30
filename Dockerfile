@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 
 RUN find . -name "*.pyc" -delete
 
-CMD ["python", "-u", "dingding.py"]
+CMD ["python", "-u", "translate.py"]
