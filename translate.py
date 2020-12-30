@@ -117,5 +117,3 @@ if __name__ == '__main__':
             print(doc['_id'], chinese_title)
         except Exception as e:
             print(e)
-
-        time.sleep(1)
