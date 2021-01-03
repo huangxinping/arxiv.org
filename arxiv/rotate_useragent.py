@@ -1,5 +1,6 @@
 import random
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+import requests
 
 
 class RotateUserAgentMiddleware(UserAgentMiddleware):
@@ -11,9 +12,11 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         if ua:
             request.headers.setdefault('User-Agent', ua)
             # 参考 http://pkmishra.github.io/blog/2013/03/18/how-to-run-scrapy-with-TOR-and-multiple-browser-agents-part-1-mac/
-            # request.meta['proxy'] = 'http://127.0.0.1:8888'
+            response = requests.get('http://192.168.0.125:32440/get/')
+            if response.ok:
+                request.meta['proxy'] = f"http://{response.json()['proxy']}"
 
-    # the default user_agent_list composes chrome,I E,firefox,Mozilla,opera,netscape
+    # the default user_agent_list composes chrome,IE,firefox,Mozilla,opera,netscape
     # for more user agent strings,you can find it in http://www.useragentstring.com/pages/useragentstring.php
     user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 "
