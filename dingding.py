@@ -5,7 +5,6 @@ import datetime
 import requests
 from translate import translate_with_baidu
 
-
 current_access_token = None
 
 
@@ -13,6 +12,7 @@ def notify(title, chinese_title, category, abstract, page, paper, created_at):
     """
     docs: https://work.weixin.qq.com/api/doc/90001/90143/90372#%E6%96%87%E6%9C%AC%E5%8D%A1%E7%89%87%E6%B6%88%E6%81%AF
     """
+
     def send(access_token, title, chinese_title, category, abstract, page, paper, created_at):
         if len(chinese_title) <= 0:
             return
@@ -68,16 +68,15 @@ def main():
     today = datetime.datetime.now()
     for offset in range(0, 5):
         date = today - datetime.timedelta(offset)
-        date_regx = re.compile(date.strftime('%Y-%m-%d'), re.IGNORECASE)
         cursor = client.papers.arxiv.find({
-            'submissions.date': date_regx,
+            'submissions.date': date.strftime('%Y-%m-%d'),
             'subjects.short': subject_regx
         })
 
         keeped_titles = []
         keeped_docs = []
         for doc in cursor:
-            if doc['title'] not in keeped_titles:
+            if doc['title'] not in keeped_titles and not doc['notified']:
                 keeped_titles.append(doc['title'])
                 keeped_docs.append(doc)
         for doc in keeped_docs:
@@ -86,11 +85,15 @@ def main():
                 if str(item['short']).startswith('cs.'):
                     category = item['short']
                     break
-            notify(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'], doc['attachment'], date.strftime('%Y-%m-%d'))
-            # time.sleep(5)
-
-        if cursor.count() > 0:
-            break
+            notify(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'],
+                   doc['attachment'], date.strftime('%Y-%m-%d'))
+            client.papers.arxiv.update_one({
+                'title': doc['title']
+            }, {
+                '$set': {
+                    'notified': True
+                }
+            }, upsert=False)
 
 
 if __name__ == '__main__':
