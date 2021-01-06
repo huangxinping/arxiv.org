@@ -76,17 +76,22 @@ def main():
         keeped_titles = []
         keeped_docs = []
         for doc in cursor:
-            if doc['title'] not in keeped_titles and not doc['notified']:
+            if doc['title'] not in keeped_titles:
                 keeped_titles.append(doc['title'])
                 keeped_docs.append(doc)
         for doc in keeped_docs:
+            if doc.get('notified', False):
+                continue
+
             category = ''
             for item in doc['subjects']:
                 if str(item['short']).startswith('cs.'):
                     category = item['short']
                     break
+
             notify(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'],
                    doc['attachment'], date.strftime('%Y-%m-%d'))
+
             client.papers.arxiv.update_one({
                 'title': doc['title']
             }, {
