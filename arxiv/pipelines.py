@@ -74,6 +74,7 @@ class MongoCachePipeline:
             'subjects': item['subjects'],
             'submissions': item['submissions'],
             'attachment': item['attachment'],
+            'notified': False
         }
         client = pymongo.MongoClient("192.168.0.210", 27017)
         cursor = client.papers.arxiv.find({"url": item['url']})
