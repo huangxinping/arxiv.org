@@ -19,7 +19,7 @@ def notify(title, chinese_title, category, abstract, page, paper, created_at):
         url = f'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}'
         chinese_abstract = translate_with_baidu(abstract)
         data = {
-            "touser": "HuangXinPing|LiuTao|jiny",
+            "touser": "HuangXinPing|LiuTao|jiny|PuPu" if category == '图形' or category == '人机交互' else "HuangXinPing|LiuTao|jiny",
             # "touser": "HuangXinPing",
             "msgtype": "textcard",
             "agentid": "1000004",
@@ -34,7 +34,7 @@ def notify(title, chinese_title, category, abstract, page, paper, created_at):
         requests.post(url=url, json=data, headers=headers)
 
         data = {
-            "touser": "HuangXinPing|LiuTao|jiny",
+            "touser": "HuangXinPing|LiuTao|jiny|PuPu" if category == '图形' or category == '人机交互' else "HuangXinPing|LiuTao|jiny",
             # "touser": "HuangXinPing",
             "msgtype": "text",
             "agentid": "1000004",
