@@ -10,8 +10,13 @@ import re
 
 
 def translate_with_baidu(text):
-    appid = '20201116000617930'  # 填写你的appid
-    secretKey = 'PSrK_o403EnySZ_SvIXn'  # 填写你的密钥
+    certs = {
+        '20201116000617930': 'PSrK_o403EnySZ_SvIXn',
+        '20210108000666680': 'yIRhMSEX3dEXAz_5XF68',
+        '20210108000666625': '1N41UYeQDq8nSFTGG18z'
+    }
+    appid = random.choice(tuple(certs.keys()))
+    secretKey = certs[appid]
 
     httpClient = None
     myurl = '/api/trans/vip/translate'
