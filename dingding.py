@@ -9,6 +9,9 @@ current_access_token = None
 
 
 def notify_dingding(title, chinese_title, category, abstract, page, paper, created_at):
+    """
+    References: https://www.cnblogs.com/tjp40922/p/11299023.html
+    """
     chinese_abstract = translate_with_baidu(abstract)
     url = 'https://oapi.dingtalk.com/robot/send?access_token=cb57e398c71b1f447fc6c2972187809776231f9067cc8cd68d011322848f7559'
     # data = {
