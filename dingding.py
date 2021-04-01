@@ -8,7 +8,42 @@ from translate import translate_with_baidu
 current_access_token = None
 
 
-def notify(title, chinese_title, category, abstract, page, paper, created_at):
+def notify_dingding(title, chinese_title, category, abstract, page, paper, created_at):
+    chinese_abstract = translate_with_baidu(abstract)
+    url = 'https://oapi.dingtalk.com/robot/send?access_token=cb57e398c71b1f447fc6c2972187809776231f9067cc8cd68d011322848f7559'
+    # data = {
+    #     "msgtype": "markdown",
+    #     "markdown": {
+    #         "title": chinese_title,
+    #         "text": "#### " + chinese_abstract + "\n" +
+    #                 "> ###### 类别: " + category + "\n" +
+    #                 "> ###### 发表时间: " + created_at + "\n" +
+    #                 "> ###### 论文地址: " + paper + "\n"
+    #     }
+    # }
+    data = {
+        "actionCard": {
+            "title": chinese_title,
+            "text": "![screenshot](http://www.dmoe.cc/random.php)" + "\n" +
+                    "# "+ chinese_title + "\n" +
+                    "## " + chinese_abstract + "\n" +
+                    "### " + created_at + "\n" +
+                    "### " + category,
+            "hideAvatar": "0",
+            "btnOrientation": "0",
+            "singleTitle": "阅读全文",
+            "singleURL": paper,
+        },
+        "msgtype": "actionCard"
+    }
+    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    responnse = requests.post(url=url, json=data, headers=headers)
+    responnse.encoding = 'utf-8'
+    if responnse.status_code == 200:
+        print(responnse.json())
+
+
+def notify_weixin(title, chinese_title, category, abstract, page, paper, created_at):
     """
     docs: https://work.weixin.qq.com/api/doc/90001/90143/90372#%E6%96%87%E6%9C%AC%E5%8D%A1%E7%89%87%E6%B6%88%E6%81%AF
     """
@@ -89,8 +124,10 @@ def main():
                     category = item['short']
                     break
 
-            notify(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'],
-                   doc['attachment'], date.strftime('%Y-%m-%d'))
+            # notify_weixin(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'],
+            #        doc['attachment'], date.strftime('%Y-%m-%d'))
+            notify_dingding(doc['title'], doc['chinese_title'], translates[category], doc['abstract'], doc['url'],
+                            doc['attachment'], date.strftime('%Y-%m-%d'))
 
             client.papers.arxiv.update_one({
                 'title': doc['title']
