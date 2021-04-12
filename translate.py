@@ -11,9 +11,7 @@ import re
 
 def translate_with_baidu(text):
     certs = {
-        '20201116000617930': 'PSrK_o403EnySZ_SvIXn',
-        '20210108000666680': 'yIRhMSEX3dEXAz_5XF68',
-        '20210108000666625': '1N41UYeQDq8nSFTGG18z'
+        '20201116000617930': 'PSrK_o403EnySZ_SvIXn'
     }
     appid = random.choice(tuple(certs.keys()))
     secretKey = certs[appid]

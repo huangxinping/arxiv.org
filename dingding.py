@@ -27,11 +27,9 @@ def notify_dingding(title, chinese_title, category, abstract, page, paper, creat
     data = {
         "actionCard": {
             "title": chinese_title,
-            "text": "![screenshot](http://www.dmoe.cc/random.php)" + "\n" +
-                    "# "+ chinese_title + "\n" +
-                    "## " + chinese_abstract + "\n" +
-                    "### " + created_at + "\n" +
-                    "### " + category,
+            "text": "# "+ chinese_title + "\n" +
+                    "`category` `created_at`" + "\n" +
+                    "###### " + chinese_abstract,
             "hideAvatar": "0",
             "btnOrientation": "0",
             "singleTitle": "阅读全文",
