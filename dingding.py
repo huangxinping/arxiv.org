@@ -28,7 +28,7 @@ def notify_dingding(title, chinese_title, category, abstract, page, paper, creat
         "actionCard": {
             "title": chinese_title,
             "text": "# "+ chinese_title + "\n" +
-                    "`category` `created_at`" + "\n" +
+                    "`"+ category + "`" + "`" + created_at + "`" + "\n" +
                     "###### " + chinese_abstract,
             "hideAvatar": "0",
             "btnOrientation": "0",
