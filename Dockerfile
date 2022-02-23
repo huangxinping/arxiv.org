@@ -1,4 +1,4 @@
-FROM python:3.6.0-slim
+FROM python:3.6.0
 LABEL author="huangxinping<o0402@outlook.com>"
 
 ENV TIME_ZONE=Asia/Shanghai
