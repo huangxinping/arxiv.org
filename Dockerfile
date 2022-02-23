@@ -11,5 +11,4 @@ WORKDIR /src
 
 RUN pip install --upgrade pip && pip install -r requirements.txt && find . -name "*.pyc" -delete
 
-
 CMD ["scrapy", "crawl", "arxiv"]
