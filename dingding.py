@@ -70,7 +70,7 @@ def notify_weixin(title, chinese_title, category, abstract, page, paper, created
         requests.post(url=url, json=data, headers=headers)
 
         data = {
-            "touser": "HuangXinPing|LiuTao|jiny|PuPu" if category == '图形' or category == '人机交互' else "HuangXinPing|LiuTao|jiny",
+            "touser": "HuangXinPing|jiny" if category == '图形' or category == '人机交互' else "HuangXinPing|LiuTao|jiny",
             # "touser": "HuangXinPing",
             "msgtype": "text",
             "agentid": "1000004",
