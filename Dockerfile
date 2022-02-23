@@ -9,9 +9,7 @@ RUN mkdir /src
 COPY . /src
 WORKDIR /src
 
-RUN pip install -r requirements.txt
-#RUN pip install -r requirements.txt -i https://pypi.doubanio.com/simple/ --trusted-host pypi.doubanio.com
+RUN pip install --upgrade pip && pip install -r requirements.txt && find . -name "*.pyc" -delete
 
-RUN find . -name "*.pyc" -delete
 
 CMD ["scrapy", "crawl", "arxiv"]
