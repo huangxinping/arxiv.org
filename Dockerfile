@@ -9,8 +9,6 @@ RUN mkdir /src
 COPY . /src
 WORKDIR /src
 
-RUN pip install -r requirements.txt
-
-RUN find . -name "*.pyc" -delete
+RUN pip install --upgrade pip && pip install -r requirements.txt && find . -name "*.pyc" -delete
 
 CMD ["python", "-u", "translate.py"]
