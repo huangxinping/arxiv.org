@@ -77,8 +77,7 @@ class MongoCachePipeline:
             'notified': False
         }
         client = pymongo.MongoClient("192.168.0.210", 27017)
-        cursor = client.papers.arxiv.find({"url": item['url']})
-        if cursor.count() <= 0:
+        if client.papers.arxiv.count_documents({"url": item['url']}) <= 0:
             client.papers.arxiv.insert_one(doc)
         else:
             query = {"url": item['url'], "chinese_title": ''}

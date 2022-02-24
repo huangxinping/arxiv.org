@@ -82,8 +82,7 @@ class ArxivDownloaderMiddleware:
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
         client = pymongo.MongoClient("192.168.0.210", 27017)
-        cursor = client.papers.arxiv.find({"url": request.url.split('?')[0]})
-        if cursor.count() <= 0:
+        if client.papers.arxiv.count_documents({"url": request.url.split('?')[0]}) <= 0:
             return None
         raise IgnoreRequest(f'{request.url} is filted.')
 
