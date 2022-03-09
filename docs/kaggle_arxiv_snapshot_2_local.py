@@ -7,7 +7,7 @@ import pymongo
 import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 
-client = pymongo.MongoClient("192.168.0.210", 27017)
+client = pymongo.MongoClient("192.168.0.23", 27017)
 
 
 categories = {}
