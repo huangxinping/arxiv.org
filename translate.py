@@ -104,7 +104,7 @@ def translate_with_youdao(text):
 
 
 if __name__ == '__main__':
-    client = pymongo.MongoClient("192.168.0.210", 27017)
+    client = pymongo.MongoClient("192.168.0.23", 27017)
     subject_regx = re.compile("^cs.", re.IGNORECASE)
     cursor = client.papers.arxiv.find({
         "chinese_title": '',
