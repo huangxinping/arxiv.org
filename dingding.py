@@ -99,7 +99,7 @@ def main():
         for row in spamreader:
             translates[row[0]] = row[2]
 
-    client = pymongo.MongoClient("192.168.0.210", 27017)
+    client = pymongo.MongoClient("192.168.0.23", 27017)
     subject_regx = re.compile("^cs.", re.IGNORECASE)
     today = datetime.datetime.now()
     for offset in range(0, 5):
