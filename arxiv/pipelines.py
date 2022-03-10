@@ -76,7 +76,7 @@ class MongoCachePipeline:
             'attachment': item['attachment'],
             'notified': False
         }
-        client = pymongo.MongoClient("192.168.0.210", 21017)
+        client = pymongo.MongoClient("192.168.0.23", 21017)
         if client.papers.arxiv.count_documents({"url": item['url']}) <= 0:
             client.papers.arxiv.insert_one(doc)
         else:
