@@ -12,7 +12,7 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         if ua:
             request.headers.setdefault('User-Agent', ua)
             # 参考 http://pkmishra.github.io/blog/2013/03/18/how-to-run-scrapy-with-TOR-and-multiple-browser-agents-part-1-mac/
-            response = requests.get('http://192.168.0.115:32208/get/')
+            response = requests.get('http://192.168.0.112:31975/get/')
             if response.ok:
                 request.meta['proxy'] = f"http://{response.json()['proxy']}"
 
