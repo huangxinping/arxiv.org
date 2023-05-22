@@ -17,7 +17,7 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
             # response = requests.get('http://192.168.0.112:31975/get/')
             # if response.ok:
             #     request.meta['proxy'] = f"http://{response.json()['proxy']}"
-            request.meta['proxy'] = 'http://192.168.0.227:7890'
+            # request.meta['proxy'] = 'http://192.168.0.227:7890'
 
     # the default user_agent_list composes chrome,IE,firefox,Mozilla,opera,netscape
     # for more user agent strings,you can find it in http://www.useragentstring.com/pages/useragentstring.php
