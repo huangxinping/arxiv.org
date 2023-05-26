@@ -21,26 +21,26 @@ class ArxivSpider(CrawlSpider):
     allowed_domains = ['arxiv.org']
 
     start_urls = [
-        'https://arxiv.org/list/cs/pastweek?show=9999',  # Computer Science
-        'https://arxiv.org/list/econ/pastweek?show=9999',  # Economics
-        'https://arxiv.org/list/eess/pastweek?show=9999',  # Electrical Engineering and Systems Science
-        'https://arxiv.org/list/stat/pastweek?show=9999',  # Statistics
-        'https://arxiv.org/list/q-fin/pastweek?show=9999',  # Quantitative Finance
-        'https://arxiv.org/list/q-bio/pastweek?show=9999',  # Quantitative Biology
-        'https://arxiv.org/list/math/pastweek?show=9999',  # Mathematics
-        'https://arxiv.org/list/astro-ph/pastweek?show=9999',  # Physics - Astrophysics
-        'https://arxiv.org/list/cond-mat/pastweek?show=9999',  # Physics - Condensed Matter
-        'https://arxiv.org/list/gr-qc/pastweek?show=9999',  # Physics - General Relativity and Quantum Cosmology
-        'https://arxiv.org/list/hep-ex/pastweek?show=9999',  # Physics - High Energy Physics - Experiment
-        'https://arxiv.org/list/hep-lat/pastweek?show=9999',  # Physics - High Energy Physics - Lattice
-        'https://arxiv.org/list/hep-ph/pastweek?show=9999',  # Physics - High Energy Physics - Phenomenology
-        'https://arxiv.org/list/hep-th/pastweek?show=9999',  # Physics - High Energy Physics - Theory
-        'https://arxiv.org/list/math-ph/pastweek?show=9999',  # Physics - Mathematical Physics
-        'https://arxiv.org/list/nlin/pastweek?show=9999',  # Physics - Nonlinear Sciences
-        'https://arxiv.org/list/nucl-ex/pastweek?show=9999',  # Physics - Nuclear Experiment
-        'https://arxiv.org/list/nucl-th/pastweek?show=9999',  # Physics - Nuclear Theory
-        'https://arxiv.org/list/physics/pastweek?show=9999',  # Physics - Condensed Matter
-        'https://arxiv.org/list/quant-ph/pastweek?show=9999',  # Physics
+        'https://arxiv.org/list/cs/pastweek',  # Computer Science
+        'https://arxiv.org/list/econ/pastweek',  # Economics
+        'https://arxiv.org/list/eess/pastweek',  # Electrical Engineering and Systems Science
+        'https://arxiv.org/list/stat/pastweek',  # Statistics
+        'https://arxiv.org/list/q-fin/pastweek',  # Quantitative Finance
+        'https://arxiv.org/list/q-bio/pastweek',  # Quantitative Biology
+        'https://arxiv.org/list/math/pastweek',  # Mathematics
+        'https://arxiv.org/list/astro-ph/pastweek',  # Physics - Astrophysics
+        'https://arxiv.org/list/cond-mat/pastweek',  # Physics - Condensed Matter
+        'https://arxiv.org/list/gr-qc/pastweek',  # Physics - General Relativity and Quantum Cosmology
+        'https://arxiv.org/list/hep-ex/pastweek',  # Physics - High Energy Physics - Experiment
+        'https://arxiv.org/list/hep-lat/pastweek',  # Physics - High Energy Physics - Lattice
+        'https://arxiv.org/list/hep-ph/pastweek',  # Physics - High Energy Physics - Phenomenology
+        'https://arxiv.org/list/hep-th/pastweek',  # Physics - High Energy Physics - Theory
+        'https://arxiv.org/list/math-ph/pastweek',  # Physics - Mathematical Physics
+        'https://arxiv.org/list/nlin/pastweek',  # Physics - Nonlinear Sciences
+        'https://arxiv.org/list/nucl-ex/pastweek',  # Physics - Nuclear Experiment
+        'https://arxiv.org/list/nucl-th/pastweek',  # Physics - Nuclear Theory
+        'https://arxiv.org/list/physics/pastweek',  # Physics - Condensed Matter
+        'https://arxiv.org/list/quant-ph/pastweek',  # Physics
     ]
 
     rules = [
