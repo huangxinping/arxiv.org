@@ -21,26 +21,26 @@ class ArxivSpider(CrawlSpider):
     allowed_domains = ['arxiv.org']
 
     start_urls = [
-        'https://arxiv.org/list/cs/pastweek',  # Computer Science
-        'https://arxiv.org/list/econ/pastweek',  # Economics
-        'https://arxiv.org/list/eess/pastweek',  # Electrical Engineering and Systems Science
-        'https://arxiv.org/list/stat/pastweek',  # Statistics
-        'https://arxiv.org/list/q-fin/pastweek',  # Quantitative Finance
-        'https://arxiv.org/list/q-bio/pastweek',  # Quantitative Biology
-        'https://arxiv.org/list/math/pastweek',  # Mathematics
-        'https://arxiv.org/list/astro-ph/pastweek',  # Physics - Astrophysics
-        'https://arxiv.org/list/cond-mat/pastweek',  # Physics - Condensed Matter
-        'https://arxiv.org/list/gr-qc/pastweek',  # Physics - General Relativity and Quantum Cosmology
-        'https://arxiv.org/list/hep-ex/pastweek',  # Physics - High Energy Physics - Experiment
-        'https://arxiv.org/list/hep-lat/pastweek',  # Physics - High Energy Physics - Lattice
-        'https://arxiv.org/list/hep-ph/pastweek',  # Physics - High Energy Physics - Phenomenology
-        'https://arxiv.org/list/hep-th/pastweek',  # Physics - High Energy Physics - Theory
-        'https://arxiv.org/list/math-ph/pastweek',  # Physics - Mathematical Physics
-        'https://arxiv.org/list/nlin/pastweek',  # Physics - Nonlinear Sciences
-        'https://arxiv.org/list/nucl-ex/pastweek',  # Physics - Nuclear Experiment
-        'https://arxiv.org/list/nucl-th/pastweek',  # Physics - Nuclear Theory
-        'https://arxiv.org/list/physics/pastweek',  # Physics - Condensed Matter
-        'https://arxiv.org/list/quant-ph/pastweek',  # Physics
+        'https://arxiv.org/list/cs/pastweek?skip=0&show=3000',  # Computer Science
+        'https://arxiv.org/list/econ/pastweek?skip=0&show=3000',  # Economics
+        'https://arxiv.org/list/eess/pastweek?skip=0&show=3000',  # Electrical Engineering and Systems Science
+        'https://arxiv.org/list/stat/pastweek?skip=0&show=3000',  # Statistics
+        'https://arxiv.org/list/q-fin/pastweek?skip=0&show=3000',  # Quantitative Finance
+        'https://arxiv.org/list/q-bio/pastweek?skip=0&show=3000',  # Quantitative Biology
+        'https://arxiv.org/list/math/pastweek?skip=0&show=3000',  # Mathematics
+        'https://arxiv.org/list/astro-ph/pastweek?skip=0&show=3000',  # Physics - Astrophysics
+        'https://arxiv.org/list/cond-mat/pastweek?skip=0&show=3000',  # Physics - Condensed Matter
+        'https://arxiv.org/list/gr-qc/pastweek?skip=0&show=3000',  # Physics - General Relativity and Quantum Cosmology
+        'https://arxiv.org/list/hep-ex/pastweek?skip=0&show=3000',  # Physics - High Energy Physics - Experiment
+        'https://arxiv.org/list/hep-lat/pastweek?skip=0&show=3000',  # Physics - High Energy Physics - Lattice
+        'https://arxiv.org/list/hep-ph/pastweek?skip=0&show=3000',  # Physics - High Energy Physics - Phenomenology
+        'https://arxiv.org/list/hep-th/pastweek?skip=0&show=3000',  # Physics - High Energy Physics - Theory
+        'https://arxiv.org/list/math-ph/pastweek?skip=0&show=3000',  # Physics - Mathematical Physics
+        'https://arxiv.org/list/nlin/pastweek?skip=0&show=3000',  # Physics - Nonlinear Sciences
+        'https://arxiv.org/list/nucl-ex/pastweek?skip=0&show=3000',  # Physics - Nuclear Experiment
+        'https://arxiv.org/list/nucl-th/pastweek?skip=0&show=3000',  # Physics - Nuclear Theory
+        'https://arxiv.org/list/physics/pastweek?skip=0&show=3000',  # Physics - Condensed Matter
+        'https://arxiv.org/list/quant-ph/pastweek?skip=0&show=3000',  # Physics
     ]
 
     rules = [
@@ -89,43 +89,44 @@ class ArxivSpider(CrawlSpider):
             subject_shortnames = list(map(lambda x: re.search('\(.*\)', x).group(0).replace('(', '').replace(')', ''), subjects))
             item['subjects'] = [{'name': fullname, 'short': shortname} for fullname, shortname in zip(subject_fullnames, subject_shortnames)]
 
-        submission_history_xpath = "//div[@class='submission-history']"
-        submission_history_selector = response.xpath(submission_history_xpath).extract()
-        if len(submission_history_selector):
-            submissions = []
-            for submission_history in submission_history_selector:
-                # submission author
-                submission_author = re.search('From:.*\[', submission_history).group(0)
-                submission_author = submission_author.replace('From: ', '')
-                submission_author = submission_author.replace(' [', '')
+        # submission_history_xpath = "//div[@class='submission-history']"
+        # submission_history_selector = response.xpath(submission_history_xpath).extract()
+        # if len(submission_history_selector):
+        #     submissions = []
+            # for submission_history in submission_history_selector:
+            #     # submission author
+            #     submission_author = re.search('From:.*\[', submission_history).group(0)
+            #     submission_author = submission_author.replace('From: ', '')
+            #     submission_author = submission_author.replace(' [', '')
 
-                # the page's submission time
-                submission_time = re.search('</strong>\n.*<b', submission_history).group(0)
-                submission_time = submission_time.replace('</strong>\n', '')
-                submission_time = submission_time.replace('<b', '')
+            #     # the page's submission time
+            #     submission_time = re.search('</strong>\n.*<b', submission_history).group(0)
+            #     submission_time = submission_time.replace('</strong>\n', '')
+            #     submission_time = submission_time.replace('<b', '')
 
-                # the page's submisstion attachment size
-                submission_attachment_size = re.search('\(.*\)', submission_time).group(0)
-                submission_attachment_size = submission_attachment_size.replace('(', '')
-                submission_attachment_size = submission_attachment_size.replace(')', '')
+            #     # the page's submisstion attachment size
+            #     submission_attachment_size = re.search('\(.*\)', submission_time).group(0)
+            #     submission_attachment_size = submission_attachment_size.replace('(', '')
+            #     submission_attachment_size = submission_attachment_size.replace(')', '')
 
-                # convert to true submission date
-                submission_time = submission_time.replace(f' ({submission_attachment_size})', '')
-                utc_fmt = '%a, %d %b %Y %H:%M:%S UTC'
-                # local_fmt = '%Y-%m-%d %H:%M:%S+08:00'
-                local_fmt = '%Y-%m-%d'
-                submission_local_date = utc_str_to_local_str(submission_time, utc_fmt, local_fmt)
+            #     # convert to true submission date
+            #     submission_time = submission_time.replace(f' ({submission_attachment_size})', '')
+            #     utc_fmt = '%a, %d %b %Y %H:%M:%S UTC'
+            #     # local_fmt = '%Y-%m-%d %H:%M:%S+08:00'
+            #     local_fmt = '%Y-%m-%d'
+            #     submission_local_date = utc_str_to_local_str(submission_time, utc_fmt, local_fmt)
 
-                # convert to true submission attachment size
-                submission_attachment_size = submission_attachment_size.replace(',', '')
-                submission_attachment_size = submission_attachment_size.replace(' KB', '')
+            #     # convert to true submission attachment size
+            #     submission_attachment_size = submission_attachment_size.replace(',', '')
+            #     submission_attachment_size = submission_attachment_size.replace(' KB', '')
 
-                submissions.append({
-                    'author': submission_author,
-                    'date': submission_local_date,
-                    'attachment_size': submission_attachment_size,
-                })
+            #     submissions.append({
+            #         'author': submission_author,
+            #         'date': submission_local_date,
+            #         'attachment_size': submission_attachment_size,
+            #     })
 
-            item['submissions'] = submissions
+            # item['submissions'] = submissions
+        item['submissions'] = [] # fix the value because it is a bug.
 
         yield item
