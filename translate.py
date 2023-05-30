@@ -111,7 +111,7 @@ if __name__ == '__main__':
         'subjects.short': subject_regx
     }).sort(
         'submissions.date', pymongo.DESCENDING
-    ).limit(100)
+    ).limit(1000)
     for doc in cursor:
         try:
             chinese_title = translate_with_youdao(doc['title'])
