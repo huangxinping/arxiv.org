@@ -51,26 +51,12 @@ def notify_weixin(title, chinese_title, category, abstract, page, paper, created
 
     def send(access_token, title, chinese_title, category, abstract, page, paper, created_at):
         if len(chinese_title) <= 0:
-            return
+            chinese_title = title
         url = f'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}'
         chinese_abstract = translate_with_baidu(abstract)
-        data = {
-            "touser": "HuangXinPing|LiuTao|jiny|PuPu" if category == '图形' or category == '人机交互' else "HuangXinPing|LiuTao|jiny",
-            # "touser": "HuangXinPing",
-            "msgtype": "textcard",
-            "agentid": "1000004",
-            "textcard": {
-                "title": f"{chinese_title}",
-                "description": f"<div class=\"gray\">{created_at} {category}</div> <div class=\"normal\">点击查看论文<br><br>⏬⏬⏬⏬⏬论文简介⏬⏬⏬⏬⏬⏬</div>",
-                "url": f"{paper}",
-                "btntxt": "更多"
-            },
-        }
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-        requests.post(url=url, json=data, headers=headers)
-
         data = {
-            "touser": "HuangXinPing|jiny" if category == '图形' or category == '人机交互' else "HuangXinPing|LiuTao|jiny",
+            "touser": "HuangXinPing|jiny",
             # "touser": "HuangXinPing",
             "msgtype": "text",
             "agentid": "1000004",
@@ -102,7 +88,7 @@ def main():
     client = pymongo.MongoClient("192.168.0.23", 21017)
     subject_regx = re.compile("^cs.", re.IGNORECASE)
     today = datetime.datetime.now()
-    for offset in range(0, 15):
+    for offset in range(0, 30):
         date = today - datetime.timedelta(offset)
         cursor = client.papers.arxiv.find({
             'submissions.date': date.strftime('%Y-%m-%d'),
