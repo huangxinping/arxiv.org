@@ -89,44 +89,33 @@ class ArxivSpider(CrawlSpider):
             subject_shortnames = list(map(lambda x: re.search('\(.*\)', x).group(0).replace('(', '').replace(')', ''), subjects))
             item['subjects'] = [{'name': fullname, 'short': shortname} for fullname, shortname in zip(subject_fullnames, subject_shortnames)]
 
-        # submission_history_xpath = "//div[@class='submission-history']"
-        # submission_history_selector = response.xpath(submission_history_xpath).extract()
-        # if len(submission_history_selector):
-        #     submissions = []
-            # for submission_history in submission_history_selector:
-            #     # submission author
-            #     submission_author = re.search('From:.*\[', submission_history).group(0)
-            #     submission_author = submission_author.replace('From: ', '')
-            #     submission_author = submission_author.replace(' [', '')
+        submission_history_xpath = "//div[@class='submission-history']"
+        submission_history_selector = response.xpath(submission_history_xpath).extract()
+        if len(submission_history_selector):
+            submissions = []
+            for submission_history in submission_history_selector:
+                # submission author
+                submission_author = (submission_history.split('[')[0]).split(':')[1].strip()
 
-            #     # the page's submission time
-            #     submission_time = re.search('</strong>\n.*<b', submission_history).group(0)
-            #     submission_time = submission_time.replace('</strong>\n', '')
-            #     submission_time = submission_time.replace('<b', '')
+                # the page's submission time
+                submission_time = ((submission_history.split('</strong>')[1]).split('(')[0]).replace('\n','').strip()
 
-            #     # the page's submisstion attachment size
-            #     submission_attachment_size = re.search('\(.*\)', submission_time).group(0)
-            #     submission_attachment_size = submission_attachment_size.replace('(', '')
-            #     submission_attachment_size = submission_attachment_size.replace(')', '')
+                # the page's submisstion attachment size
+                submission_attachment_size = (submission_history.split('(')[1]).split(' KB')[0]
 
-            #     # convert to true submission date
-            #     submission_time = submission_time.replace(f' ({submission_attachment_size})', '')
-            #     utc_fmt = '%a, %d %b %Y %H:%M:%S UTC'
-            #     # local_fmt = '%Y-%m-%d %H:%M:%S+08:00'
-            #     local_fmt = '%Y-%m-%d'
-            #     submission_local_date = utc_str_to_local_str(submission_time, utc_fmt, local_fmt)
+                # convert to true submission date
+                utc_fmt = '%a, %d %b %Y %H:%M:%S UTC'
+                # local_fmt = '%Y-%m-%d %H:%M:%S+08:00'
+                local_fmt = '%Y-%m-%d'
+                submission_local_date = utc_str_to_local_str(submission_time, utc_fmt, local_fmt)
 
-            #     # convert to true submission attachment size
-            #     submission_attachment_size = submission_attachment_size.replace(',', '')
-            #     submission_attachment_size = submission_attachment_size.replace(' KB', '')
+                submissions.append({
+                    'author': submission_author,
+                    'date': submission_local_date,
+                    'attachment_size': submission_attachment_size,
+                })
 
-            #     submissions.append({
-            #         'author': submission_author,
-            #         'date': submission_local_date,
-            #         'attachment_size': submission_attachment_size,
-            #     })
-
-            # item['submissions'] = submissions
-        item['submissions'] = [] # fix the value because it is a bug.
+            item['submissions'] = submissions
+        # item['submissions'] = [] # fix the value because it is a bug.
 
         yield item
