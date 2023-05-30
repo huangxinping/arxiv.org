@@ -14,9 +14,9 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
             
             # 参考 http://pkmishra.github.io/blog/2013/03/18/how-to-run-scrapy-with-TOR-and-multiple-browser-agents-part-1-mac/
             # 代理池已经用不了爬 arxiv 了，所以切换到 ShadowsSockX 2023-05-08
-            # response = requests.get('http://192.168.0.112:31975/get/')
-            # if response.ok:
-            #     request.meta['proxy'] = f"http://{response.json()['proxy']}"
+            response = requests.get('http://192.168.0.112:31975/get/')
+            if response.ok:
+                request.meta['proxy'] = f"http://{response.json()['proxy']}"
             # request.meta['proxy'] = 'http://192.168.0.227:7890'
 
     # the default user_agent_list composes chrome,IE,firefox,Mozilla,opera,netscape
