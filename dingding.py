@@ -88,7 +88,7 @@ def main():
     client = pymongo.MongoClient("192.168.0.23", 21017)
     subject_regx = re.compile("^cs.", re.IGNORECASE)
     today = datetime.datetime.now()
-    for offset in range(30):
+    for offset in range(60):
         date = today - datetime.timedelta(offset)
         cursor = client.papers.arxiv.find({
             'submissions.date': date.strftime('%Y-%m-%d'),
@@ -101,7 +101,6 @@ def main():
             if doc['title'] not in keeped_titles:
                 keeped_titles.append(doc['title'])
                 keeped_docs.append(doc)
-        print(keeped_docs)
         for doc in keeped_docs:
             if doc.get('notified', False):
                 continue
