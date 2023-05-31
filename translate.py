@@ -90,7 +90,7 @@ def translate_with_youdao(text):
         "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 "
         "(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"
     ]
-    url = f'http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i={text}'
+    url = f"https://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i={text.replace('#', '')}"
     resp = requests.get(url, headers={
         'User-Agent': random.choice(user_agent_list)
     })
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         'subjects.short': subject_regx
     }).sort(
         'submissions.date', pymongo.DESCENDING
-    ).limit(10000)
+    ).limit(100)
     for doc in cursor:
         try:
             chinese_title = translate_with_youdao(doc['title'])
