@@ -88,7 +88,7 @@ def main():
     client = pymongo.MongoClient("192.168.0.23", 21017)
     subject_regx = re.compile("^cs.", re.IGNORECASE)
     today = datetime.datetime.now()
-    for offset in range(0, 30):
+    for offset in range(30):
         date = today - datetime.timedelta(offset)
         cursor = client.papers.arxiv.find({
             'submissions.date': date.strftime('%Y-%m-%d'),
